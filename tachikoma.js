@@ -20,24 +20,29 @@
             var max = 10;
             this.attempts = this.attempts || 0;
 
-            if (attempts === max) throw new Error("Can't establish socket connection");
+            if (attempts === max) throw new this.TachikomaError("Can't establish socket connection");
 
             var self = this;
 
             try {
-                this.ws = new WebSocket("ws://localhost:3001/");
+                this.ws = new WebSocket("ws://localhost:3001/"); // TODO 2 this actually gets created
                 this.attempts++;
 
+                // TODO 3 and these get bound
                 this.ws.onopen = function (ev) {
                     console.info(ev);
                     api.write(null, "open");
                 }
 
+                // TODO 5 which is why we can use the error and close events to
+                // manage retry cycles and other aspects of errors
                 this.ws.onclose = function (ev, arg) {
                     console.info(ev);
                     api.write(ev, "close");
                 }
 
+                // TODO 4 which means that this gets called when something like
+                // a connection_failure happens
                 this.ws.onerror = function (ev) {
                     console.error(ev);
                     api.write(ev, "error");
@@ -47,7 +52,9 @@
                     api.write(msg, "message");
                 }
 
-            } catch (e) { //TODO this isn't actually being hit when the constructor throws
+            } catch (e) { // TODO 1 this isn't actually being hit when the ws fails to connect
+                // TODO 6 allegedly this will still go off when a port is being
+                // blocked, though, which is kind of bonkers
                 this.create.call(this, this.attempts);
             }
         }
