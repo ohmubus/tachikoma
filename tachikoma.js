@@ -1,16 +1,32 @@
 ;(function (context) {
     function tachikoma (api, commitSepuku) {
         this.api = api;
+
         this.commitSepuku = commitSepuku;
+
+        this.TachikomaError = function TachikomaError () {
+            var temp = Error.apply(this, arguments);
+
+            var key;
+
+            for (key of Object.getOwnPropertyNames(tremp)) {
+                this[key] = temp[key];
+            }
+
+            this.name = "TachikomaError";
+        }
 
         this.create = function create (attempts) {
             var max = 10;
-            var attempts = attempts || 0;
+            this.attempts = this.attempts || 0;
 
             if (attempts === max) throw new Error("Can't establish socket connection");
 
+            var self = this;
+
             try {
-                this.ws = new WebSocket("ws://localhost:3000/");
+                this.ws = new WebSocket("ws://localhost:3001/");
+                this.attempts++;
 
                 this.ws.onopen = function (ev) {
                     console.info(ev);
@@ -31,9 +47,8 @@
                     api.write(msg, "message");
                 }
 
-            } catch (err) {
-                attempts++;
-                this.create.call(this, attempts);
+            } catch (e) { //TODO this isn't actually being hit when the constructor throws
+                this.create.call(this, this.attempts);
             }
         }
 
@@ -62,7 +77,7 @@
     }
 
     tachikoma.prototype.handleReopen = function handleReopen () {
-        this.create.call(this);
+        this.create.call(this, this.attempts);
     }
 
     if (context.seele) {
@@ -73,3 +88,11 @@
         // other stuff
     }
 })(window);
+
+// connecting 0
+// open 1
+// closing 2
+// closed 3
+//
+// .close(code, reason)
+// .send(stuff)
