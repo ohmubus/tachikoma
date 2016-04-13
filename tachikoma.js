@@ -9,7 +9,7 @@
 
             var key;
 
-            for (key of Object.getOwnPropertyNames(tremp)) {
+            for (key of Object.getOwnPropertyNames(temp)) {
                 this[key] = temp[key];
             }
 
@@ -25,7 +25,7 @@
             var self = this;
 
             try {
-                this.ws = new WebSocket("ws://localhost:3001/"); // TODO 2 this actually gets created
+                this.ws = new WebSocket("ws://localhost:3000/"); // TODO 2 this actually gets created
                 this.attempts++;
 
                 // TODO 3 and these get bound
