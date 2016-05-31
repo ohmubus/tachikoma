@@ -12,13 +12,13 @@
     "changelogCommand": "git log --pretty=format:'* %s (%h)' [REV_RANGE]",
     "requireCleanWorkingDir": false,
     "src": {
-        "pushRepo": null,
+        "pushRepo": "https://github.com/enlore/tachikoma.git",
         "beforeStartCommand": false,
         "beforeStageCommand": false,
         "afterReleaseCommand": false
     },
     "dist": {
-        "repo": false,
+        "repo": "https://github.com/ohmubus/tachikoma.git",
         "stageDir": ".stage",
         "baseDir": "dist",
         "files": ["**/*"],
@@ -27,7 +27,7 @@
         "afterReleaseCommand": false
     },
     "npm": {
-        "publish": false,
+        "publish": true,
         "publishPath": ".",
         "tag": "latest",
         "private": false,
