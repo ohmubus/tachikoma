@@ -160,7 +160,7 @@
     }
 
     if (context.seele) {
-      context.seele.register("websocket", tachikoma);
+      context.seele.register("tachikoma", tachikoma);
     } else if (context.require) {
         // stuff
     } else if (context.module && context.module.exports) {
